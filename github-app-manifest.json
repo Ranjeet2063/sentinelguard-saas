@@ -16,7 +16,10 @@
   },
   "default_events": [
     "pull_request",
-    "marketplace_purchase"
+    "pull_request_review",
+    "check_run",
+    "check_suite",
+    "issues"
   ],
   "description": "Autonomous security invariant scanner and automated code review auditor for Soroban smart contracts, Web3 protocols, and critical codebases."
 }

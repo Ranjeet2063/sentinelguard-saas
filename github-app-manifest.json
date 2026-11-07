@@ -1,14 +1,11 @@
 {
-  "name": "SentinelGuard-Security-Auditor",
-  "url": "https://github.com/marketplace",
+  "name": "SentinelGuard-Auditor-2063",
+  "url": "https://github.com/Ranjeet2063/sentinelguard-saas",
+  "redirect_url": "https://github.com/Ranjeet2063/sentinelguard-saas",
   "hook_attributes": {
-    "url": "https://api.yourdomain.com/api/github/webhook",
-    "active": true
+    "url": "https://github.com/Ranjeet2063/sentinelguard-saas",
+    "active": false
   },
-  "redirect_url": "https://api.yourdomain.com/setup/callback",
-  "callback_urls": [
-    "https://api.yourdomain.com/auth/callback"
-  ],
   "public": true,
   "default_permissions": {
     "pull_requests": "write",

@@ -39,6 +39,15 @@ export function buildServer(): FastifyInstance {
     });
   });
 
+  // 1-Click GitHub App Setup Page
+  app.get("/setup", async (_req: FastifyRequest, reply: FastifyReply) => {
+    const fs = await import("fs");
+    const path = await import("path");
+    const htmlPath = path.resolve(process.cwd(), "setup_github_app.html");
+    const html = fs.readFileSync(htmlPath, "utf-8");
+    return reply.status(200).type("text/html; charset=utf-8").send(html);
+  });
+
   // Financial & Operational Metrics (For Admin / Dashboard)
   app.get("/metrics", async (_req: FastifyRequest, reply: FastifyReply) => {
     const financial = globalStore.getFinancialMetrics();

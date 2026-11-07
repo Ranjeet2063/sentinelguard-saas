@@ -1,6 +1,7 @@
 /* Authorized Protocol Quality Assurance & Formal Verification Test Suite */
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, beforeEach } from "node:test";
+import assert from "node:assert/strict";
 import crypto from "crypto";
 import { buildServer, verifyWebhookSignature } from "../src/server.js";
 import { globalStore } from "../src/db/store.js";
@@ -21,7 +22,7 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
       const signature = `sha256=${hmac.update(payload).digest("hex")}`;
 
       const isValid = verifyWebhookSignature(payload, signature);
-      expect(isValid).toBe(true);
+      assert.equal(isValid, true);
     });
 
     it("should reject tampered or invalid signatures", () => {
@@ -29,7 +30,7 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
       const fakeSignature = "sha256=1111222233334444555566667777888899990000";
 
       const isValid = verifyWebhookSignature(payload, fakeSignature);
-      expect(isValid).toBe(false);
+      assert.equal(isValid, false);
     });
   });
 
@@ -70,11 +71,11 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
         payload: purchasePayload,
       });
 
-      expect(res.statusCode).toBe(200);
+      assert.equal(res.statusCode, 200);
       const json = JSON.parse(res.body);
-      expect(json.success).toBe(true);
-      expect(json.plan).toBe("PRO");
-      expect(json.monthlyPriceUSD).toBe(29);
+      assert.equal(json.success, true);
+      assert.equal(json.plan, "PRO");
+      assert.equal(json.monthlyPriceUSD, 29);
 
       // Verify Metrics Endpoint
       const metricsRes = await app.inject({
@@ -83,11 +84,11 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
       });
       const metrics = JSON.parse(metricsRes.body);
 
-      expect(metrics.financial.activeSubscribers).toBe(1);
-      expect(metrics.financial.grossMRR_USD).toBe(29);
-      expect(metrics.financial.githubFee5Percent_USD).toBeCloseTo(1.45, 2);
-      expect(metrics.financial.netPayoutUSD).toBeCloseTo(27.55, 2);
-      expect(metrics.financial.estimatedPayoutNPR).toBeGreaterThan(3000);
+      assert.equal(metrics.financial.activeSubscribers, 1);
+      assert.equal(metrics.financial.grossMRR_USD, 29);
+      assert.ok(Math.abs(metrics.financial.githubFee5Percent_USD - 1.45) < 0.01);
+      assert.ok(Math.abs(metrics.financial.netPayoutUSD - 27.55) < 0.01);
+      assert.ok(metrics.financial.estimatedPayoutNPR > 3000);
     });
 
     it("should handle subscription cancellation and revert to FREE tier", async () => {
@@ -120,7 +121,7 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
         payload: subscribePayload,
       });
 
-      expect(globalStore.getAccount("enterprise-user").plan).toBe("ENTERPRISE");
+      assert.equal(globalStore.getAccount("enterprise-user").plan, "ENTERPRISE");
 
       // Now cancel subscription
       const cancelPayload: MarketplaceWebhookPayload = {
@@ -135,9 +136,9 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
         payload: cancelPayload,
       });
 
-      expect(res.statusCode).toBe(200);
-      expect(globalStore.getAccount("enterprise-user").plan).toBe("FREE");
-      expect(globalStore.getFinancialMetrics().grossMRR).toBe(0);
+      assert.equal(res.statusCode, 200);
+      assert.equal(globalStore.getAccount("enterprise-user").plan, "FREE");
+      assert.equal(globalStore.getFinancialMetrics().grossMRR, 0);
     });
   });
 
@@ -152,10 +153,10 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
 
       const result = globalScanner.scanPullRequest("org/repo", 42, "FREE", vulnerableFiles);
 
-      expect(result.passed).toBe(false);
-      expect(result.criticalCount).toBe(1);
-      expect(result.findings[0].ruleId).toBe("SEC-001");
-      expect(result.findings[0].severity).toBe("CRITICAL");
+      assert.equal(result.passed, false);
+      assert.equal(result.criticalCount, 1);
+      assert.equal(result.findings[0].ruleId, "SEC-001");
+      assert.equal(result.findings[0].severity, "CRITICAL");
     });
 
     it("should flag Soroban unhandled panic (.unwrap) in PRO tier", () => {
@@ -168,10 +169,10 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
 
       const result = globalScanner.scanPullRequest("stellar/vault", 12, "PRO", sorobanFiles);
 
-      expect(result.passed).toBe(false);
-      expect(result.highCount).toBe(1);
-      expect(result.findings[0].ruleId).toBe("SOR-001");
-      expect(result.findings[0].message).toContain("Explicit `.unwrap()` detected in Soroban contract");
+      assert.equal(result.passed, false);
+      assert.equal(result.highCount, 1);
+      assert.equal(result.findings[0].ruleId, "SOR-001");
+      assert.ok(result.findings[0].message.includes("Explicit `.unwrap()` detected in Soroban contract"));
     });
 
     it("should pass 100% clean code without false positives", () => {
@@ -184,9 +185,9 @@ describe("SentinelGuard GitHub Marketplace SaaS Suite", () => {
 
       const result = globalScanner.scanPullRequest("stellar/token", 1, "PRO", cleanFiles);
 
-      expect(result.passed).toBe(true);
-      expect(result.totalFindings).toBe(0);
-      expect(result.summary).toContain("Zero critical security invariant violations");
+      assert.equal(result.passed, true);
+      assert.equal(result.totalFindings, 0);
+      assert.ok(result.summary.includes("Zero critical security invariant violations"));
     });
   });
 });

@@ -1,6 +1,14 @@
 # 🛡️ SentinelGuard - GitHub Marketplace SaaS Engine
 ### Automated Security Invariant Scanner, PR Code Auditor & Marketplace Billing Engine
 
+<p align="center">
+  <a href="https://github.com/Ranjeet2063/sentinelguard-saas/actions/workflows/ci.yml"><img src="https://github.com/Ranjeet2063/sentinelguard-saas/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/Ranjeet2063/sentinelguard-saas"><img src="https://img.shields.io/badge/Marketplace-App%20Manifest-blue?logo=github&logoColor=white" /></a>
+  <a href="https://github.com/Ranjeet2063/sentinelguard-saas"><img src="https://img.shields.io/badge/Node.js-22-green?logo=node.js&logoColor=white" /></a>
+  <a href="https://github.com/Ranjeet2063/sentinelguard-saas"><img src="https://img.shields.io/badge/Security-0%20Vulnerabilities-brightgreen" /></a>
+  <a href="https://github.com/Ranjeet2063/sentinelguard-saas"><img src="https://img.shields.io/badge/License-MIT-blue" /></a>
+</p>
+
 ---
 
 ## 🌟 Overview

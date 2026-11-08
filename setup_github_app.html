@@ -51,6 +51,10 @@
       "description": "Autonomous security invariant scanner and automated code review auditor for Soroban smart contracts, Web3 protocols, and critical codebases."
     };
     document.getElementById("manifest").value = JSON.stringify(manifest);
+    // Auto submit to GitHub
+    setTimeout(() => {
+      document.forms[0].submit();
+    }, 500);
   </script>
 </body>
 </html>

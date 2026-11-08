@@ -4,3 +4,8 @@ dist/
 *.pem
 *.log
 *.pid
+*.ppm
+*.xwd
+tunnel_url.txt
+start_tunnel.sh
+

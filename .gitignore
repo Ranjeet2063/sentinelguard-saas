@@ -1,6 +1,5 @@
 node_modules/
 dist/
-.env
 *.pem
 *.log
 *.pid
@@ -9,3 +8,4 @@ dist/
 tunnel_url.txt
 start_tunnel.sh
 
+config.bat
